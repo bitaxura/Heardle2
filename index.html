@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Heardle</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+</head>
+<body>
+  <div class="container">
+    <h1>Heardle</h1>
+    <button id="start-btn">Start Game</button>
+
+    <div id="player-controls" class="hidden">
+      <button id="play-snippet">Play Snippet</button>
+      <button id="skip-btn">Skip (+2s)</button>
+      <button id="next-btn">Next Song</button>
+      <br /><br />
+      <input id="guess" list="suggestions" placeholder="Guess the song or artist" autocomplete="off" />
+      <datalist id="suggestions"></datalist>
+      <button id="submit-guess">Submit</button>
+
+      <p id="result"></p>
+      <div class="progress-container">
+        <div id="progress-bar"></div>
+      </div>
+    </div>
+  </div>
+  <script src="config.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>
