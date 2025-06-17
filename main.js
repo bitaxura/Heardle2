@@ -1,12 +1,15 @@
 const clientId = window.config.CLIENT_ID;
 const clientSecret = window.config.CLIENT_SECRET;
+const token = window.config.TOKEN;
 
 let playlist = [];
 let currentTrack;
 let currentAnswer;
 let tryCount = 1;
 let snippetDuration = 1000;
-const MAX_TRIES = 5;
+const MAX_TRIES = 4;
+let player = null
+let deviceID = null;
 
 async function loadPlaylist() {
     const res = await fetch('tracks.json');
@@ -65,7 +68,7 @@ function setupUI(){
 
     function handleWrongAnswer(){
         tryCount++;
-        snippetDuration += (tryCount ** 2);
+        snippetDuration += (tryCount ** 2) * 1000;
 
         if (tryCount > MAX_TRIES) {
             result.textContent = `Out of Tries! It was: ${currentAnswer}`;
@@ -86,3 +89,58 @@ function pickRandomTrack() {
     snippetDuration = 1000;
     console.log('Now Playing: ', currentTrack.name)
 }
+
+window.onSpotifyWebPlaybackSDKReady = () => {
+    const player = new Spotify.Player({
+        name: 'Heardle Player',
+        getOAuthToken: cb => { cb(token)},
+        volume: 0.8
+    });
+
+    player.addListener('ready', ({ device_id }) => {
+        console.log('Ready with Device ID', device_id);
+    });
+
+    player.addListener('not_ready', ({ device_id }) => {
+        console.log('Device ID has gone offline', device_id);
+    });
+    
+    player.addListener('initialization_error', ({ message }) => {
+        console.error(message);
+    });
+  
+    player.addListener('authentication_error', ({ message }) => {
+        console.error(message);
+    });
+  
+    player.addListener('account_error', ({ message }) => {
+        console.error(message);
+    });
+  
+    player.connect();
+}
+
+function playSnippet() {
+    if (!player || !currentTrack) return;
+
+    player._options.getOAuthToken(token => {
+        fetch(`https://api.spotify.com/v1/me/player/play`, {
+            method: 'PUT',
+            body: JSON.stringify({
+                uris: [currentTrack.uri],
+                position_ms: 0
+            }),
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        }).then(() => {
+            setTimeout(() => {
+                player.pause();
+            }, snippetDuration);
+        });
+    });
+}
+
+loadPlaylist();
+setupUI();
