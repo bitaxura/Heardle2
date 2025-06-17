@@ -25,6 +25,38 @@ async function loadPlaylist() {
     });
 }
 
+function pickRandomTrack() {
+    const randomIndex = Math.floor(Math.random() * playlist.length);
+    currentTrack = playlist[randomIndex];
+    currentAnswer = `${currentTrack.name} - ${currentTrack.artist}`;
+
+    tryCount = 1;
+    snippetDuration = 1000;
+    console.log('Now Playing: ', currentTrack.name)
+}
+
+function playSnippet() {
+    if (!player || !currentTrack) return;
+
+    player._options.getOAuthToken(token => {
+        fetch(`https://api.spotify.com/v1/me/player/play`, {
+            method: 'PUT',
+            body: JSON.stringify({
+                uris: [currentTrack.uri],
+                position_ms: 0
+            }),
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        }).then(() => {
+            setTimeout(() => {
+                player.pause();
+            }, snippetDuration);
+        });
+    });
+}
+
 function setupUI(){
     const startBtn = document.getElementById('start-btn');
     const playBtn = document.getElementById('play-snippet');
@@ -53,7 +85,7 @@ function setupUI(){
     });
 
     submitBtn.addEventListener('click', () =>{
-        const guess = guessInput.value.trim().toLowerCase();
+        const guess = guessInput.value;
         if (!guess) return;
 
         if (guess === currentAnswer){
@@ -81,17 +113,8 @@ function setupUI(){
     }
 }
 
-function pickRandomTrack() {
-    const randomIndex = Math.floor(Math.random() * playlist.length);
-    currentTrack = playlist[randomIndex];
-    currentAnswer = currentTrack.name.toLowerCase();
-    tryCount = 1;
-    snippetDuration = 1000;
-    console.log('Now Playing: ', currentTrack.name)
-}
-
 window.onSpotifyWebPlaybackSDKReady = () => {
-    const player = new Spotify.Player({
+        player = new Spotify.Player({
         name: 'Heardle Player',
         getOAuthToken: cb => { cb(token)},
         volume: 0.8
@@ -99,6 +122,8 @@ window.onSpotifyWebPlaybackSDKReady = () => {
 
     player.addListener('ready', ({ device_id }) => {
         console.log('Ready with Device ID', device_id);
+        deviceID = device_id
+        transferPlaybackHere();
     });
 
     player.addListener('not_ready', ({ device_id }) => {
@@ -120,25 +145,24 @@ window.onSpotifyWebPlaybackSDKReady = () => {
     player.connect();
 }
 
-function playSnippet() {
-    if (!player || !currentTrack) return;
-
-    player._options.getOAuthToken(token => {
-        fetch(`https://api.spotify.com/v1/me/player/play`, {
-            method: 'PUT',
-            body: JSON.stringify({
-                uris: [currentTrack.uri],
-                position_ms: 0
-            }),
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            }
-        }).then(() => {
-            setTimeout(() => {
-                player.pause();
-            }, snippetDuration);
-        });
+function transferPlaybackHere() {
+    fetch('https://api.spotify.com/v1/me/player', {
+        method: 'PUT',
+        body: JSON.stringify({
+            device_ids: [deviceID],
+            play: false
+        }),
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+    })
+    .then(res => {
+        if (res.ok) {
+            console.log('Playback transferred to Web Player.');
+        } else {
+            console.error('Failed to transfer playback.');
+        }
     });
 }
 
