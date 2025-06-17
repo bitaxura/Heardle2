@@ -10,6 +10,7 @@ let snippetDuration = 1000;
 const MAX_TRIES = 4;
 let player = null
 let deviceID = null;
+let shouldBePaused = false;
 
 async function loadPlaylist() {
     const res = await fetch('tracks.json');
@@ -36,8 +37,22 @@ function pickRandomTrack() {
 }
 
 function playSnippet() {
-    if (!player || !currentTrack) return;
+    const progressBar = document.getElementById('progress-bar');
+    progressBar.style.width = '0%';
 
+    const intervalMs = 100;
+    let elapsed = 0;
+    const updateInterval = setInterval(() => {
+        elapsed += intervalMs;
+        const percent = Math.min((elapsed / snippetDuration) * 100, 100);
+        progressBar.style.width = `${percent}%`;
+
+        if (elapsed >= snippetDuration) {
+            clearInterval(updateInterval);
+        }
+    }, intervalMs);
+
+    shouldBePaused = false;
     player._options.getOAuthToken(token => {
         fetch(`https://api.spotify.com/v1/me/player/play`, {
             method: 'PUT',
@@ -52,6 +67,7 @@ function playSnippet() {
         }).then(() => {
             setTimeout(() => {
                 player.pause();
+                shouldBePaused = true;
             }, snippetDuration);
         });
     });
@@ -102,6 +118,11 @@ function setupUI(){
         tryCount++;
         snippetDuration += (tryCount ** 2) * 1000;
 
+        const nextTryCount = tryCount + 1;
+        const nextIncrementSeconds = ((nextTryCount ** 2) * 1000) / 1000;
+
+        skipBtn.textContent = `Skip (+${nextIncrementSeconds}s)`;
+
         if (tryCount > MAX_TRIES) {
             result.textContent = `Out of Tries! It was: ${currentAnswer}`;
             player.pause();
@@ -119,6 +140,10 @@ window.onSpotifyWebPlaybackSDKReady = () => {
         getOAuthToken: cb => { cb(token)},
         volume: 0.8
     });
+
+    player.addListener('player_state_changed', state => {
+        if (!state.puased && shouldBePaused) player.pause();
+    })
 
     player.addListener('ready', ({ device_id }) => {
         console.log('Ready with Device ID', device_id);
