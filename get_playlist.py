@@ -8,11 +8,11 @@ load_dotenv()
 
 CLIENT_ID = os.getenv('CLIENT_ID')
 CLIENT_SECRET = os.getenv('CLIENT_SECRET')
+PLAYLIST_ID = os.getenv('PLAYLIST_ID')
 
 sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(client_id=CLIENT_ID, client_secret=CLIENT_SECRET))
 
-playlist_id = "2FtRo7sGt12ted89Qk1xUA"
-results = sp.playlist_tracks(playlist_id)
+results = sp.playlist_tracks(PLAYLIST_ID)
 
 tracks = []
 
@@ -25,5 +25,5 @@ for item in results['items']:
         'album_art': track['album']['images'][0]['url']
     })
 
-with open('songs.json', 'w') as f:
+with open('tracks.json', 'w') as f:
     json.dump(tracks, f, indent=2)
