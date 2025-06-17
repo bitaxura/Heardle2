@@ -24,4 +24,6 @@ for item in results['items']:
         'uri': track['uri'],
         'album_art': track['album']['images'][0]['url']
     })
-print(tracks)
+
+with open('songs.json', 'w') as f:
+    json.dump(tracks, f, indent=2)
