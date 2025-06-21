@@ -6,11 +6,13 @@ let playlist = [];
 let currentTrack;
 let currentAnswer;
 let tryCount = 1;
-let snippetDuration = 1000;
+let snippetDuration = 2000;
 const MAX_TRIES = 4;
 let player = null
 let deviceID = null;
 let shouldBePaused = false;
+let snippetTimeoutId = null;
+let progressIntervalId = null;
 
 async function loadPlaylist() {
     const res = await fetch('tracks.json');
@@ -40,19 +42,28 @@ function playSnippet() {
     const progressBar = document.getElementById('progress-bar');
     progressBar.style.width = '0%';
 
+    if (progressIntervalId) {
+        clearInterval(progressIntervalId);
+        progressIntervalId = null;
+    }
+
     const intervalMs = 100;
     let elapsed = 0;
-    const updateInterval = setInterval(() => {
+
+    progressIntervalId = setInterval(() => {
         elapsed += intervalMs;
         const percent = Math.min((elapsed / snippetDuration) * 100, 100);
         progressBar.style.width = `${percent}%`;
 
         if (elapsed >= snippetDuration) {
             clearInterval(updateInterval);
+            progressIntervalId = null;
         }
     }, intervalMs);
-
+    
     shouldBePaused = false;
+    clearSnippetTimeout();
+
     player._options.getOAuthToken(token => {
         fetch(`https://api.spotify.com/v1/me/player/play`, {
             method: 'PUT',
@@ -65,7 +76,7 @@ function playSnippet() {
                 'Authorization': `Bearer ${token}`
             }
         }).then(() => {
-            setTimeout(() => {
+            snippetTimeoutId = setTimeout(() => {
                 player.pause();
                 shouldBePaused = true;
             }, snippetDuration);
@@ -91,9 +102,7 @@ function setupUI(){
 
     playBtn.addEventListener('click', playSnippet);
 
-    skipBtn.addEventListener('click', () => {
-        handleWrongAnswer();
-    });
+    skipBtn.addEventListener('click', handleWrongAnswer);
 
     nextBtn.addEventListener('click', () => {
         pickRandomTrack();
@@ -105,8 +114,11 @@ function setupUI(){
         if (!guess) return;
 
         if (guess === currentAnswer){
-            result.textContent = 'Correct!'
+            result.textContent = `Correct! Now Playing ${guess}`;
             player.pause();
+
+            snippetDuration = 30000
+            playSnippet();
         }
         else{
             handleWrongAnswer();
@@ -115,6 +127,7 @@ function setupUI(){
     })
 
     function handleWrongAnswer(){
+        player.pause();
         tryCount++;
         snippetDuration += (tryCount ** 2) * 1000;
 
@@ -128,9 +141,17 @@ function setupUI(){
             player.pause();
         }
         else {
-            result.textContent = `Playing ${snippetDuration / 1000}s snippet.`; 
+            result.textContent = `Playing ${snippetDuration / 1000}s snippet.`;
             playSnippet();
         }
+        progressBar.style.width = '0%';
+    }
+}
+
+function clearSnippetTimeout() {
+    if (snippetTimeoutId) {
+        clearTimeout(snippetTimeoutId);
+        snippetTimeoutId = null;
     }
 }
 
@@ -142,7 +163,7 @@ window.onSpotifyWebPlaybackSDKReady = () => {
     });
 
     player.addListener('player_state_changed', state => {
-        if (!state.puased && shouldBePaused) player.pause();
+        if (!state.paused && shouldBePaused) player.pause();
     })
 
     player.addListener('ready', ({ device_id }) => {
