@@ -12,18 +12,26 @@ PLAYLIST_ID = os.getenv('PLAYLIST_ID')
 
 sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(client_id=CLIENT_ID, client_secret=CLIENT_SECRET))
 
-results = sp.playlist_tracks(PLAYLIST_ID)
-
 tracks = []
+limit = 100
+offset = 0
 
-for item in results['items']:
-    track = item['track']
-    tracks.append({
-        'name': track['name'],
-        'artist': track['artists'][0]['name'],
-        'uri': track['uri'],
-        'album_art': track['album']['images'][0]['url']
-    })
+while True:
+    results = sp.playlist_tracks(PLAYLIST_ID, limit=limit, offset=offset)
+    items = results['items']
+    if not items:
+        break
+    
+    for item in items:
+        track = item['track']
+        tracks.append({
+            'name': track['name'],
+            'artist': track['artists'][0]['name'],
+            'uri': track['uri'],
+            'album_art': track['album']['images'][0]['url']
+        })
+    
+    offset += limit
 
 with open('tracks.json', 'w') as f:
     json.dump(tracks, f, indent=2)
