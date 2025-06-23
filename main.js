@@ -11,6 +11,8 @@ let deviceID = null;
 let shouldBePaused = false;
 let snippetTimeoutId = null;
 let progressIntervalId = null;
+let correct = 0;
+let total = 1;
 
 const guessList = document.getElementById('guess-list');
 const guessesUl = document.getElementById('guesses');
@@ -18,6 +20,7 @@ const guessInput = document.getElementById('guess');
 const submitBtn = document.getElementById('submit-guess');
 const result = document.getElementById('result');
 const progressBar = document.getElementById('progress-bar');
+const count = document.getElementById('count')
 
 async function loadPlaylist() {
     const res = await fetch('tracks.json');
@@ -107,6 +110,7 @@ function setupUI() {
         startBtn.classList.add('hidden');
         pickRandomTrack();
         playSnippet();
+        count.textContent = `${correct}/${total} correct so far`;
     });
 
     playBtn.addEventListener('click', playSnippet);
@@ -140,10 +144,11 @@ function setupUI() {
         pickRandomTrack();
         playSnippet();
         guessesUl.innerHTML = '';
-        guessList.classList.add('hidden');
         result.textContent = `Playing ${snippetDuration / 1000}s snippet.`;
         skipBtn.disabled = false;
         skipBtn.textContent = "Skip (+2s)";
+        total++;
+        count.textContent = `${correct}/${total} correct so far`;
       });
       
     submitBtn.addEventListener('click', () => {
@@ -157,6 +162,8 @@ function setupUI() {
             player.pause();
             snippetDuration = 30000;
             playSnippet();
+            correct++;
+            count.textContent = `${correct}/${total} correct so far`;
         } else {
             handleWrongAnswer(guess);
         }
@@ -214,22 +221,6 @@ window.onSpotifyWebPlaybackSDKReady = () => {
         console.log('Ready with Device ID', device_id);
         deviceID = device_id;
         transferPlaybackHere();
-    });
-
-    player.addListener('not_ready', ({ device_id }) => {
-        console.log('Device ID has gone offline', device_id);
-    });
-
-    player.addListener('initialization_error', ({ message }) => {
-        console.error(message);
-    });
-
-    player.addListener('authentication_error', ({ message }) => {
-        console.error(message);
-    });
-
-    player.addListener('account_error', ({ message }) => {
-        console.error(message);
     });
 
     player.connect();
