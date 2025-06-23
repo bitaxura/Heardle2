@@ -51,6 +51,9 @@ button {
   align-self: center;
 }
 
+#submit-guess {
+  margin-top: 1rem;
+}
 
 button:hover:not(:disabled) {
   background-color: #3e5a34;
