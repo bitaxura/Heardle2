@@ -1,7 +1,13 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: #273822; /* dark green */
-  color: #d9d1bc;      /* soft beige text */
+  background: #273822;
+  color: #d9d1bc;
   margin: 0;
   padding: 2rem 1rem;
   display: flex;
@@ -112,14 +118,6 @@ input::placeholder {
   display: none;
 }
 
-.container {
-  background: #41532a;
-  padding: 2rem;
-  border-radius: 12px;
-  box-shadow: 0 0 20px rgba(33, 43, 15, 0.7);
-  color: #d0cda0;
-}
-
 #guess-list {
   background-color: #2e3b18;
   padding: 1rem;
@@ -127,7 +125,7 @@ input::placeholder {
   box-shadow: 0 2px 10px rgba(20, 30, 10, 0.8);
   color: #d9d7ba;
   text-align: left;
-  width: 100%;
+  width: 92%;
   box-sizing: border-box;
 }
 
