@@ -159,9 +159,15 @@ Set these in your `.env` file:
 ## Known Issues
 
 - Spotify playback requires a **Premium** account.
-- `config.js` uses a hardcoded token — in production, use dynamic token refreshing for security.
+- `config.js` uses a hardcoded token that needs to be updated every hour.
 
 ---
+
+## Future Plans
+
+- Implement OAuth 2.0 token refresh (remove need for manual token)
+- Add a give up button
+- Add artist image and song/album cover popup at the end of the round
 
 ## License
 
