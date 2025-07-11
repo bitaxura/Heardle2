@@ -69,6 +69,52 @@ tracks.json      # JSON file containing playlist tracks (generated)
 
 6. You will also need to manually get an **OAuth token** for testing and paste it in `config.js`. Get the token [here](https://developer.spotify.com/documentation/web-playback-sdk/tutorials/getting-started#:~:text=Since%20this%20tutorial%20doesn%27t%20cover%20the%20authorization%20flow%2C%20we%20will%20provide%20your%20access%20token%20here%3A).
 
+## How to Get a Spotify Playlist and Playlist ID
+
+To use Heardle 2, you'll need to fetch tracks from a Spotify playlist. Here's how to create a playlist and get its ID:
+
+### 1. Create or Choose a Playlist
+
+* Go to [Spotify Web](https://open.spotify.com/) or use the Spotify desktop/mobile app.
+* Create a new playlist or use an existing one.
+* Add songs you'd like to use in your game.
+
+### 2. Copy the Playlist Link
+
+1. Open the playlist in Spotify.
+2. Click the **three dots** (`...`) next to the playlist title or under the playlist name.
+3. Hover over **Share**.
+4. Click **Copy link to playlist**.
+
+   Example link:
+
+   ```
+   https://open.spotify.com/playlist/37i9dQZF1DXcBWIGoYBM5M
+   ```
+
+### 3. Extract the Playlist ID
+
+* The **Playlist ID** is the part after `/playlist/` and before any `?` or parameters.
+
+  Example:
+
+  ```
+  Playlist link: https://open.spotify.com/playlist/37i9dQZF1DXcBWIGoYBM5M?si=abc123
+  Playlist ID:   37i9dQZF1DXcBWIGoYBM5M
+  ```
+
+### 3. Paste the Playlist ID in Your `.env` File
+
+Your `.env` file should look like this:
+
+```env
+CLIENT_ID=your_spotify_client_id
+CLIENT_SECRET=your_spotify_client_secret
+PLAYLIST_ID=37i9dQZF1DXcBWIGoYBM5M
+```
+
+> Tip: Make sure the playlist is public or shared with your Spotify account to ensure it can be accessed by the API.
+
 ---
 
 ## How to Play
