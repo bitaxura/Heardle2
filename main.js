@@ -21,6 +21,7 @@ const progressBar = document.getElementById('progress-bar');
 const count = document.getElementById('count');
 
 const redirectUri = `${window.location.origin}/`;
+const clientId = 'YOUR_CLIENT_ID_HERE'; // Replace with your actual client ID
 
 (async () => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -51,8 +52,7 @@ const redirectUri = `${window.location.origin}/`;
       const codeChallenge = base64encode(hashed);
   
       localStorage.setItem('code_verifier', codeVerifier);
-  
-      const clientId = 'YOUR_CLIENT_ID_HERE'; // Replace with your actual client ID
+      
       const scope = 'user-read-private user-read-email streaming user-read-playback-state user-modify-playback-state';
   
       const authUrl = new URL("https://accounts.spotify.com/authorize");
@@ -76,7 +76,6 @@ const redirectUri = `${window.location.origin}/`;
   })();
   
   async function getToken(code) {
-    const clientId = 'YOUR_CLIENT_ID_HERE';
     const codeVerifier = localStorage.getItem('code_verifier');
   
     const response = await fetch("https://accounts.spotify.com/api/token", {
