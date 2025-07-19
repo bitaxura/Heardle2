@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Heardle</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+</head>
+<body>
+  <div id="game-wrapper">
+    <h1>Heardle</h1>
+    <button id="start-btn">Start Game</button>
+
+    <div id="player-controls" class="hidden">
+      <div id="control-buttons">
+        <button id="play-snippet">Play Snippet</button>
+        <button id="skip-btn">Skip (+2s)</button>
+        <button id="next-btn">Next Song</button>
+      </div>
+
+      <input id="guess" list="suggestions" placeholder="Guess the song or artist" autocomplete="off" />
+      <datalist id="suggestions"></datalist>
+      <button id="submit-guess">Submit</button>
+
+      <div class="result-row">
+        <p id="result"></p>
+        <p id="count"></p>
+      </div>
+
+      <div class="progress-container">
+        <div id="progress-bar"></div>
+      </div>
+    </div>
+
+    <div id="guess-list" class="hidden">
+      <h3>Your Guesses</h3>
+      <ul id="guesses"></ul>
+    </div>
+  </div>
+
+  <script src="https://sdk.scdn.co/spotify-player.js"></script>
+  <script src="config.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>
