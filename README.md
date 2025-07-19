@@ -14,8 +14,8 @@
 
 ```
 .env             # Environment variables for Spotify API credentials  
-.gitignore       # Files and directories to ignore in version control
-requirements.txt # Python dependencies for the project
+.gitignore       # Files and directories to ignore in version control  
+config.js        # Configuration file for Spotify token  
 get_playlist.py  # Python script to fetch playlist tracks  
 index.html       # Main HTML file for the game interface  
 main.js          # JavaScript logic for the game  
@@ -44,7 +44,7 @@ tracks.json      # JSON file containing playlist tracks (generated)
 2. Install Python dependencies:
 
    ```
-   pip install -r requirements.txt
+   pip install spotipy python-dotenv
    ```
 
 3. Create a `.env` file in the root directory:
@@ -56,7 +56,6 @@ tracks.json      # JSON file containing playlist tracks (generated)
    ```
 
    - Get your **Client ID** and **Client Secret** from the [Spotify Developer Dashboard](https://developer.spotify.com/dashboard).
-   - To get your custom play read here [How to Set Your Playlist](#how-to-get-a-spotify-playlist-and-playlist-id)
 
 4. Fetch playlist tracks:
 
@@ -66,20 +65,9 @@ tracks.json      # JSON file containing playlist tracks (generated)
 
    This will generate a `tracks.json` file containing tracks from the specified playlist.
 
-5. Run a local server to serve the game:
+5. Open `index.html` in your browser to play the game.
 
-   - If you are using Visual Studio Code, install the **Live Server** extension and start the server.
-   - Alternatively, if you have Python installed, you can run the following command in the terminal while in the project directory:
-
-     ```
-     python -m http.server
-     ```
-
-   - Then, open your browser and go to:
-
-     ```
-     http://127.0.0.1:8000/
-     ```
+6. You will also need to manually get an **OAuth token** for testing and paste it in `config.js`. Get the token [here](https://developer.spotify.com/documentation/web-playback-sdk/tutorials/getting-started#:~:text=Since%20this%20tutorial%20doesn%27t%20cover%20the%20authorization%20flow%2C%20we%20will%20provide%20your%20access%20token%20here%3A).
 
 ## How to Get a Spotify Playlist and Playlist ID
 
@@ -131,9 +119,6 @@ PLAYLIST_ID=37i9dQZF1DXcBWIGoYBM5M
 
 ## How to Play
 
-- When you open the game, you will be redirected to Spotify's authentication page.
-- Log in with your Spotify account and grant the necessary permissions for the game to access your playlist and playback features.
-- After successful authentication, you will be redirected back to the game interface.
 - Click the **Start Game** button to begin.
 - Listen to the snippet and enter your guess for the song title and artist.
 - Submit your guess to check if it's correct.
@@ -174,11 +159,13 @@ Set these in your `.env` file:
 ## Known Issues
 
 - Spotify playback requires a **Premium** account.
+- `config.js` uses a hardcoded token that needs to be updated every hour.
 
 ---
 
 ## Future Plans
 
+- Implement OAuth 2.0 token refresh (remove need for manual token)
 - Add a give up button
 - Add artist image and song/album cover popup at the end of the round
 
