@@ -52,7 +52,7 @@ const redirectUri = `${window.location.origin}/`;
   
       localStorage.setItem('code_verifier', codeVerifier);
   
-      const clientId = '307d9b9fdb904551a147b295c7aaaf57';
+      const clientId = 'YOUR_CLIENT_ID_HERE'; // Replace with your actual client ID
       const scope = 'user-read-private user-read-email streaming user-read-playback-state user-modify-playback-state';
   
       const authUrl = new URL("https://accounts.spotify.com/authorize");
@@ -76,7 +76,7 @@ const redirectUri = `${window.location.origin}/`;
   })();
   
   async function getToken(code) {
-    const clientId = '307d9b9fdb904551a147b295c7aaaf57';
+    const clientId = 'YOUR_CLIENT_ID_HERE';
     const codeVerifier = localStorage.getItem('code_verifier');
   
     const response = await fetch("https://accounts.spotify.com/api/token", {
