@@ -1,10 +1,8 @@
-const token = window.config.TOKEN;
-
 let playlist = [];
 let currentTrack;
 let currentAnswer;
 let tryCount = 1;
-let snippetDuration = 2000;
+let snippetDuration = 1000;
 const MAX_TRIES = 4;
 let player = null;
 let deviceID = null;
@@ -20,8 +18,88 @@ const guessInput = document.getElementById('guess');
 const submitBtn = document.getElementById('submit-guess');
 const result = document.getElementById('result');
 const progressBar = document.getElementById('progress-bar');
-const count = document.getElementById('count')
+const count = document.getElementById('count');
 
+const redirectUri = `${window.location.origin}/`;
+
+(async () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    let code = urlParams.get('code');
+    
+    if (!code) {
+      const generateRandomString = (length) => {
+        const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        const values = crypto.getRandomValues(new Uint8Array(length));
+        return values.reduce((acc, x) => acc + possible[x % possible.length], "");
+      };
+  
+      const sha256 = async (plain) => {
+        const encoder = new TextEncoder();
+        const data = encoder.encode(plain);
+        return window.crypto.subtle.digest('SHA-256', data);
+      };
+  
+      const base64encode = (input) => {
+        return btoa(String.fromCharCode(...new Uint8Array(input)))
+          .replace(/=/g, '')
+          .replace(/\+/g, '-')
+          .replace(/\//g, '_');
+      };
+  
+      const codeVerifier = generateRandomString(64);
+      const hashed = await sha256(codeVerifier);
+      const codeChallenge = base64encode(hashed);
+  
+      localStorage.setItem('code_verifier', codeVerifier);
+  
+      const clientId = 'YOUR_CLIENT_ID_HERE';
+      const scope = 'user-read-private user-read-email streaming user-read-playback-state user-modify-playback-state';
+  
+      const authUrl = new URL("https://accounts.spotify.com/authorize");
+      const params = {
+        response_type: 'code',
+        client_id: clientId,
+        scope,
+        code_challenge_method: 'S256',
+        code_challenge: codeChallenge,
+        redirect_uri: redirectUri,
+      };
+  
+      authUrl.search = new URLSearchParams(params).toString();
+      window.location.href = authUrl.toString();
+      return;
+    } else {
+      await getToken(code);
+      
+      window.history.replaceState({}, document.title, redirectUri);
+    }
+  })();
+  
+  async function getToken(code) {
+    const clientId = '307d9b9fdb904551a147b295c7aaaf57';
+    const codeVerifier = localStorage.getItem('code_verifier');
+  
+    const response = await fetch("https://accounts.spotify.com/api/token", {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({
+        client_id: clientId,
+        grant_type: 'authorization_code',
+        code,
+        redirect_uri: redirectUri,
+        code_verifier: codeVerifier,
+      }),
+    });
+  
+    const data = await response.json();
+  
+    localStorage.setItem('access_token', data.access_token);
+    localStorage.setItem('refresh_token', data.refresh_token);
+    localStorage.setItem('expires_at', Date.now() + data.expires_in * 1000);
+  
+    console.log('Access Token:', data.access_token);
+  }
+  
 async function loadPlaylist() {
     const res = await fetch('tracks.json');
     playlist = await res.json();
@@ -209,7 +287,10 @@ function clearSnippetTimeout() {
 window.onSpotifyWebPlaybackSDKReady = () => {
     player = new Spotify.Player({
         name: 'Heardle Player',
-        getOAuthToken: cb => { cb(token); },
+        getOAuthToken: cb => { 
+            const token = localStorage.getItem('access_token');
+            cb(token);
+         },
         volume: 0.9
     });
 
@@ -235,7 +316,7 @@ function transferPlaybackHere() {
         }),
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            'Authorization': `Bearer ${localStorage.getItem('access_token')}`
         }
     }).then(res => {
         if (res.ok) {
