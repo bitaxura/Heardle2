@@ -118,7 +118,8 @@ const clientId = 'YOUR_CLIENT_ID_HERE'; // Replace with your actual client ID
 function pickRandomTrack() {
     const randomIndex = Math.floor(Math.random() * playlist.length);
     currentTrack = playlist[randomIndex];
-    currentAnswer = `${currentTrack.name} - ${currentTrack.artist}`;
+    const artistString = currentTrack.artists.join(', ');
+    currentAnswer = `${currentTrack.name} - ${artistString}`;
 
     tryCount = 1;
     snippetDuration = 1000;
@@ -206,7 +207,8 @@ function setupUI() {
           datalist.innerHTML = '';
           playlist.forEach(track => {
             const option = document.createElement('option');
-            option.value = `${track.name} - ${track.artist}`;
+            const artistString = track.artists.join(', ');
+            option.value = `${track.name} - ${artistString}`;
             datalist.appendChild(option);
           });
         }
