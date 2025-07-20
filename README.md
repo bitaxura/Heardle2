@@ -81,6 +81,18 @@ tracks.json      # JSON file containing playlist tracks (generated)
      http://127.0.0.1:8000/
      ```
 
+> **Important Note about Spotify Accounts**
+> This game will only work with the Spotify account that was used to create the app (i.e., the account associated with the Client ID), unless you explicitly add additional users via the [Spotify Developer Dashboard](https://developer.spotify.com/dashboard).
+>
+> To add more users:
+>
+> 1. Go to your app in the Spotify Developer Dashboard.
+> 2. Click on your app.
+> 3. Navigate to the **User Management** tab.
+> 4. Add the Spotify email addresses of any other users who need access.
+
+---
+
 ## How to Get a Spotify Playlist and Playlist ID
 
 To use Heardle 2, you'll need to fetch tracks from a Spotify playlist. Here's how to create a playlist and get its ID:
