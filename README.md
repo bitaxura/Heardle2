@@ -91,8 +91,6 @@ tracks.json      # JSON file containing playlist tracks (generated)
 > 3. Navigate to the **User Management** tab.
 > 4. Add the Spotify email addresses of any other users who need access.
 
----
-
 ## How to Get a Spotify Playlist and Playlist ID
 
 To use Heardle 2, you'll need to fetch tracks from a Spotify playlist. Here's how to create a playlist and get its ID:
