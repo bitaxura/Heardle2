@@ -100,7 +100,7 @@ const clientId = '307d9b9fdb904551a147b295c7aaaf57';
     console.log('Access Token:', data.access_token);
   }
   
-async function loadPlaylist() {
+  async function loadPlaylist() {
     const res = await fetch('tracks.json');
     playlist = await res.json();
 
@@ -109,7 +109,8 @@ async function loadPlaylist() {
 
     playlist.forEach(track => {
         const option = document.createElement('option');
-        option.value = `${track.name} - ${track.artist}`;
+        const artistString = track.artists.join(', ');
+        option.value = `${track.name} - ${artistString}`;
         datalist.appendChild(option);
     });
 }
