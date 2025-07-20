@@ -20,7 +20,7 @@ const result = document.getElementById('result');
 const progressBar = document.getElementById('progress-bar');
 const count = document.getElementById('count');
 
-const redirectUri = `${window.location.href}/`;
+const redirectUri = `${window.location.href}`;
 const clientId = '307d9b9fdb904551a147b295c7aaaf57';
 
 (async () => {
