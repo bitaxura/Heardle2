@@ -20,7 +20,7 @@ const result = document.getElementById('result');
 const progressBar = document.getElementById('progress-bar');
 const count = document.getElementById('count');
 
-const redirectUri = `${window.location.origin}`; //For local hosting keep .origin, for online hosting change .origin to .href
+const redirectUri = `${window.location.origin}${window.location.pathname}`;
 const clientId = 'YOUR_CLIENT_ID_HERE'; // Replace with your actual client ID
 
 (async () => {
@@ -71,7 +71,8 @@ const clientId = 'YOUR_CLIENT_ID_HERE'; // Replace with your actual client ID
     } else {
       await getToken(code);
       
-      window.history.replaceState({}, document.title, redirectUri);
+      const cleanUrl = `${window.location.origin}${window.location.pathname}`;
+      window.history.replaceState({}, document.title, cleanUrl);
     }
   })();
   
