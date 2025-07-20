@@ -53,7 +53,7 @@ const clientId = 'YOUR_CLIENT_ID_HERE'; // Replace with your actual client ID
   
       localStorage.setItem('code_verifier', codeVerifier);
       
-      const scope = 'user-read-private user-read-email streaming user-read-playback-state user-modify-playback-state';
+      const scope = 'streaming user-read-playback-state user-modify-playback-state';
   
       const authUrl = new URL("https://accounts.spotify.com/authorize");
       const params = {
