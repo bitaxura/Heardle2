@@ -20,7 +20,7 @@ const result = document.getElementById('result');
 const progressBar = document.getElementById('progress-bar');
 const count = document.getElementById('count');
 
-const redirectUri = `${window.location.href}`;
+const redirectUri = `${window.location.origin}${window.location.pathname}`;
 const clientId = '307d9b9fdb904551a147b295c7aaaf57';
 
 (async () => {
@@ -70,8 +70,9 @@ const clientId = '307d9b9fdb904551a147b295c7aaaf57';
       return;
     } else {
       await getToken(code);
-      
-      window.history.replaceState({}, document.title, redirectUri);
+
+      const cleanUrl = `${window.location.origin}${window.location.pathname}`;
+      window.history.replaceState({}, document.title, cleanUrl);
     }
   })();
   
