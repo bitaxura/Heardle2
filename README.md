@@ -1,6 +1,6 @@
 # Heardle 2
 
-**Heardle 2** is a web-based music guessing game inspired by the popular Heardle game. Players listen to short snippets of songs and try to guess the song title and artist. It integrates with Spotify to fetch playlist tracks and play snippets.
+Heardle 2 is a web-based music guessing game inspired by the popular Heardle game. Players listen to short snippets of songs and try to guess the song title and artist. It integrates with Spotify to fetch playlist tracks and play snippets.
 
 ## Features
 
@@ -23,14 +23,14 @@ README.md        # Project documentation
 style.css        # Stylesheet for the game interface  
 tracks.json      # JSON file containing playlist tracks (generated)
 ```
-
+---
 ## Setup
 
 ### Prerequisites
 
-- Python 3.x
-- Spotify Developer Account
-- Spotify Premium Account (required for playback)
+* Python 3.x
+* Spotify Developer Account
+* Spotify Premium Account (required for playback)
 
 ### Installation
 
@@ -55,10 +55,32 @@ tracks.json      # JSON file containing playlist tracks (generated)
    PLAYLIST_ID=your_spotify_playlist_id
    ```
 
-   - Get your **Client ID** and **Client Secret** from the [Spotify Developer Dashboard](https://developer.spotify.com/dashboard).
-   - To get your custom play read here [How to Set Your Playlist](#how-to-get-a-spotify-playlist-and-playlist-id)
+   * Get your **Client ID** and **Client Secret** from the (see the next section)
+   * To get your custom playlist, read here: [How to Set Your Playlist](#how-to-get-a-spotify-playlist-and-playlist-id)
 
-4. Fetch playlist tracks:
+4. **Configure the Spotify Developer Dashboard:**
+
+   * Go to the [Spotify Developer Dashboard](https://developer.spotify.com/dashboard).
+   * Click **Create an App** (or choose an existing app).
+   * Under your app’s settings:
+
+     * Set the **Redirect URI** based on the local server you are using:
+
+       * If using **Live Server** (VS Code extension):
+         `http://127.0.0.1:5500/`
+       * If using **Python HTTP server**:
+         `http://127.0.0.1:8000/`
+     * Add the redirect URI under **Edit Settings → Redirect URIs**.
+   * Scroll down to **User Management** and add the email addresses of other Spotify users who should be able to use the app (see note below).
+   * Confirm that the following **APIs** are enabled in your app’s authorization flow:
+
+     * `Web API`
+
+     * `Web Playback SDK`
+
+   > **Note:** This game will only work with the Spotify account used to create the app unless you add additional users via the **User Management** section on the Spotify Developer Dashboard.
+
+5. Fetch playlist tracks:
 
    ```
    python get_playlist.py
@@ -66,30 +88,24 @@ tracks.json      # JSON file containing playlist tracks (generated)
 
    This will generate a `tracks.json` file containing tracks from the specified playlist.
 
-5. Run a local server to serve the game:
+6. Run a local server to serve the game:
 
-   - If you are using Visual Studio Code, install the **Live Server** extension and start the server.
-   - Alternatively, if you have Python installed, you can run the following command in the terminal while in the project directory:
+   * **Live Server** (recommended with VS Code):
+
+     * Right-click `index.html` and choose **Open with Live Server**.
+     * This usually runs on:
+       `http://127.0.0.1:5500/`
+   * **Python HTTP Server** (if you prefer terminal):
 
      ```
      python -m http.server
      ```
+     Make sure to run this in the project directory.
 
-   - Then, open your browser and go to:
+     Then open:
+     `http://127.0.0.1:8000/`
 
-     ```
-     http://127.0.0.1:8000/
-     ```
-
-> **Important Note about Spotify Accounts**
-> This game will only work with the Spotify account that was used to create the app (i.e., the account associated with the Client ID), unless you explicitly add additional users via the [Spotify Developer Dashboard](https://developer.spotify.com/dashboard).
->
-> To add more users:
->
-> 1. Go to your app in the Spotify Developer Dashboard.
-> 2. Click on your app.
-> 3. Navigate to the **User Management** tab.
-> 4. Add the Spotify email addresses of any other users who need access.
+---
 
 ## How to Get a Spotify Playlist and Playlist ID
 
@@ -191,6 +207,8 @@ Set these in your `.env` file:
 
 - Add a give up button
 - Add artist image and song/album cover popup at the end of the round
+
+---
 
 ## License
 
