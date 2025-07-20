@@ -24,9 +24,10 @@ while True:
     
     for item in items:
         track = item['track']
+        artists = [artist['name'] for artist in track['artists']]
         tracks.append({
             'name': track['name'],
-            'artist': track['artists'][0]['name'],
+            'artists': artists,
             'uri': track['uri'],
             'album_art': track['album']['images'][0]['url']
         })
