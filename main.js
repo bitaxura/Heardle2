@@ -20,7 +20,7 @@ const result = document.getElementById('result');
 const progressBar = document.getElementById('progress-bar');
 const count = document.getElementById('count');
 
-const redirectUri = `${window.location.origin}/`;
+const redirectUri = `${window.location.origin}`; //For local hosting keep .origin, for online hosting change .origin to .href
 const clientId = 'YOUR_CLIENT_ID_HERE'; // Replace with your actual client ID
 
 (async () => {
