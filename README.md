@@ -162,8 +162,9 @@ PLAYLIST_ID=37i9dQZF1DXcBWIGoYBM5M
 - After successful authentication, you will be redirected back to the game interface.
 - Click the **Start Game** button to begin.
 - Listen to the snippet and enter your guess for the song title and artist.
+  > **Warning:** If a song does not seem to play or is silent at the start, use the **Skip** button to move to a longer snippet.
 - Submit your guess to check if it's correct.
-- Use the **Skip** button to hear a longer snippet.
+- Use the **Skip** button to hear a longer snippet.  
 - Click **Next Song** to move to the next track.
 
 ---
@@ -200,6 +201,7 @@ Set these in your `.env` file:
 ## Known Issues
 
 - Spotify playback requires a **Premium** account.
+- Some songs may have silent sections at the beginning, which can cause playback to appear broken.
 
 ---
 
