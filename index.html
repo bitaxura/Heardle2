@@ -10,7 +10,14 @@
 <body>
   <div id="game-wrapper">
     <h1>Heardle</h1>
-    <button id="start-btn">Start Game</button>
+    <button id="start-btn" class="hidden">Start Game</button>
+    <select id="jsonSelector">
+      <option value="" disabled selected>Select a tracklist</option>
+      <option value="spotify-2020s.json">Spotify 2020s Mix</option>
+      <option value="taylor-swift.json">Taylor Swift Complete</option>
+    </select>
+
+    <pre id="output"></pre>
 
     <div id="player-controls" class="hidden">
       <div id="control-buttons">

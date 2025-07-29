@@ -19,6 +19,8 @@ const submitBtn = document.getElementById('submit-guess');
 const result = document.getElementById('result');
 const progressBar = document.getElementById('progress-bar');
 const count = document.getElementById('count');
+const selector = document.getElementById('jsonSelector');
+const output = document.getElementById('output');
 
 const redirectUri = `${window.location.origin}${window.location.pathname}`;
 const clientId = '307d9b9fdb904551a147b295c7aaaf57';
@@ -74,9 +76,9 @@ const clientId = '307d9b9fdb904551a147b295c7aaaf57';
       const cleanUrl = `${window.location.origin}${window.location.pathname}`;
       window.history.replaceState({}, document.title, cleanUrl);
     }
-  })();
+})();
   
-  async function getToken(code) {
+async function getToken(code) {
     const codeVerifier = localStorage.getItem('code_verifier');
   
     const response = await fetch("https://accounts.spotify.com/api/token", {
@@ -98,11 +100,10 @@ const clientId = '307d9b9fdb904551a147b295c7aaaf57';
     localStorage.setItem('expires_at', Date.now() + data.expires_in * 1000);
   
     console.log('Access Token:', data.access_token);
-  }
+}
   
-  async function loadPlaylist() {
-    const res = await fetch('tracks.json');
-    playlist = await res.json();
+async function loadPlaylist(response) {
+    playlist = await response.json();
 
     const datalist = document.getElementById('suggestions');
     datalist.innerHTML = '';
@@ -185,9 +186,17 @@ function setupUI() {
     const skipBtn = document.getElementById('skip-btn');
     const nextBtn = document.getElementById('next-btn');
 
+    selector.addEventListener('change', async () => {
+        const filename = selector.value;
+        const response = await fetch(`data/${filename}`);
+        loadPlaylist(response)
+        startBtn.classList.remove('hidden');
+      });
+
     startBtn.addEventListener('click', () => {
-        document.getElementById('player-controls').classList.remove('hidden');
         startBtn.classList.add('hidden');
+        selector.classList.add('hidden');
+        document.getElementById('player-controls').classList.remove('hidden');
         pickRandomTrack();
         playSnippet();
         count.textContent = `${correct}/${total} correct so far`;
@@ -329,6 +338,4 @@ function transferPlaybackHere() {
         }
     });
 }
-
-loadPlaylist();
 setupUI();
