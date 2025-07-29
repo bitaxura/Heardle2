@@ -52,7 +52,7 @@ const clientId = 'YOUR_CLIENT_ID_HERE'; // Replace with your actual client ID
       const codeChallenge = base64encode(hashed);
   
       localStorage.setItem('code_verifier', codeVerifier);
-      
+
       const scope = 'streaming user-read-playback-state user-modify-playback-state';
   
       const authUrl = new URL("https://accounts.spotify.com/authorize");
@@ -70,13 +70,13 @@ const clientId = 'YOUR_CLIENT_ID_HERE'; // Replace with your actual client ID
       return;
     } else {
       await getToken(code);
-      
+
       const cleanUrl = `${window.location.origin}${window.location.pathname}`;
       window.history.replaceState({}, document.title, cleanUrl);
     }
-  })();
+})();
   
-  async function getToken(code) {
+async function getToken(code) {
     const codeVerifier = localStorage.getItem('code_verifier');
   
     const response = await fetch("https://accounts.spotify.com/api/token", {
@@ -98,11 +98,10 @@ const clientId = 'YOUR_CLIENT_ID_HERE'; // Replace with your actual client ID
     localStorage.setItem('expires_at', Date.now() + data.expires_in * 1000);
   
     console.log('Access Token:', data.access_token);
-  }
+}
   
-  async function loadPlaylist() {
-    const res = await fetch('tracks.json');
-    playlist = await res.json();
+async function loadPlaylist(response) {
+    playlist = await response.json();
 
     const datalist = document.getElementById('suggestions');
     datalist.innerHTML = '';
@@ -185,9 +184,19 @@ function setupUI() {
     const skipBtn = document.getElementById('skip-btn');
     const nextBtn = document.getElementById('next-btn');
 
+    selector.addEventListener('change', async () => {
+        const filename = selector.value;
+        const response = await fetch(`data/${filename}`);
+        loadPlaylist(response)
+        
+        startBtn.classList.remove('hidden');
+      });
+
     startBtn.addEventListener('click', () => {
-        document.getElementById('player-controls').classList.remove('hidden');
         startBtn.classList.add('hidden');
+        selector.classList.add('hidden');
+        document.getElementById('player-controls').classList.remove('hidden');
+
         pickRandomTrack();
         playSnippet();
         count.textContent = `${correct}/${total} correct so far`;
@@ -210,7 +219,7 @@ function setupUI() {
             const artistString = track.artists.join(', ');
             option.value = `${track.name} - ${artistString}`;
             datalist.appendChild(option);
-          });
+        });
         }
       
         if (playlist.length === 0) {
@@ -330,5 +339,4 @@ function transferPlaybackHere() {
     });
 }
 
-loadPlaylist();
 setupUI();

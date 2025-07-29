@@ -10,14 +10,15 @@
 <body>
   <div id="game-wrapper">
     <h1>Heardle</h1>
-    <button id="start-btn">Start Game</button>
+    <button id="start-btn" class="hidden">Start Game</button>
 
-    <div id="player-controls" class="hidden">
-      <div id="control-buttons">
-        <button id="play-snippet">Play Snippet</button>
-        <button id="skip-btn">Skip (+2s)</button>
-        <button id="next-btn">Next Song</button>
-      </div>
+    <select id="jsonSelector">
+      <option value="" disabled selected>Select a tracklist</option>
+      <option value="JSON-FILE-NAME-HERE.json">PLAYLIST-NAME</option>
+      <option value="JSON-FILE-NAME-HERE.json">PLAYLIST-NAME</option>
+    </select>
+
+    <pre id="output"></pre>
 
       <input id="guess" list="suggestions" placeholder="Guess the song or artist" autocomplete="off" />
       <datalist id="suggestions"></datalist>
