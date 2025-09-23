@@ -3,51 +3,94 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Heardle</title>
+  
+  <!-- Primary Meta Tags -->
+  <title>Heardle 2 - Music Guessing Game | Play Online Free</title>
+  <meta name="title" content="Heardle 2 - Music Guessing Game | Play Online Free" />
+  <meta name="description" content="Play Heardle 2, the ultimate music guessing game! Test your music knowledge with tracks from Spotify 2020s, Bollywood, Taylor Swift, Gracie Abrams, and The Weeknd. Free online music game." />
+  <meta name="keywords" content="heardle, music game, song guessing game, spotify game, music quiz, bollywood music, taylor swift, gracie abrams, the weeknd, online game, free music game" />
+  <meta name="author" content="Heardle 2" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://bitaxura.github.io/Heardle2/" />
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://bitaxura.github.io/Heardle2/" />
+  <meta property="og:title" content="Heardle 2 - Music Guessing Game | Play Online Free" />
+  <meta property="og:description" content="Play Heardle 2, the ultimate music guessing game! Test your music knowledge with tracks from multiple playlists including Spotify hits, Bollywood, and popular artists." />
+  <meta property="og:image" content="https://bitaxura.github.io/Heardle2/og-image.png" />
+  <meta property="og:site_name" content="Heardle 2" />
+  
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:url" content="https://bitaxura.github.io/Heardle2/" />
+  <meta property="twitter:title" content="Heardle 2 - Music Guessing Game | Play Online Free" />
+  <meta property="twitter:description" content="Play Heardle 2, the ultimate music guessing game! Test your music knowledge with tracks from multiple playlists." />
+  <meta property="twitter:image" content="https://bitaxura.github.io/Heardle2/og-image.png" />
+  
+  <!-- Additional SEO Meta Tags -->
+  <meta name="theme-color" content="#1DB954" />
+  <meta name="msapplication-TileColor" content="#1DB954" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Heardle 2" />
+  
   <link rel="stylesheet" href="style.css" />
   <link rel="icon" href="data:;base64,iVBORw0KGgo=">
 </head>
 <body>
-  <div id="game-wrapper">
-    <h1>Heardle</h1>
-    <button id="start-btn" class="hidden">Start Game</button>
-    <select id="jsonSelector">
-      <option value="" disabled selected>Select a tracklist</option>
-      <option value="spotify-2020s.json">Spotify 2020s Mix</option>
-      <option value="bollywood.json">Bollywood Mix</option>
-      <option value="taylor-swift.json">Taylor Swift Complete</option>
-      <option value="gracie-abrams.json">Gracie Abrams Complete</option>
-      <option value="the-weeknd.json">The Weeknd Complete</option>
-    </select>
+  <main id="game-wrapper">
+    <header>
+      <h1>Heardle 2 - Music Guessing Game</h1>
+      <p>Test your music knowledge! Listen to song snippets and guess the artist or song title.</p>
+    </header>
+    
+    <section id="game-setup">
+      <h2>Choose Your Playlist</h2>
+      <button id="start-btn" class="hidden" aria-label="Start the music guessing game">Start Game</button>
+      <select id="jsonSelector" aria-label="Select a music playlist">
+        <option value="" disabled selected>Select a tracklist</option>
+        <option value="spotify-2020s.json">Spotify 2020s Mix</option>
+        <option value="bollywood.json">Bollywood Mix</option>
+        <option value="taylor-swift.json">Taylor Swift Complete</option>
+        <option value="gracie-abrams.json">Gracie Abrams Complete</option>
+        <option value="the-weeknd.json">The Weeknd Complete</option>
+      </select>
+    </section>
 
-    <pre id="output"></pre>
+    <pre id="output" aria-live="polite"></pre>
 
-    <div id="player-controls" class="hidden">
+    <section id="player-controls" class="hidden" aria-label="Game controls">
+      <h2>Game Controls</h2>
       <div id="control-buttons">
-        <button id="play-snippet">Play Snippet</button>
-        <button id="skip-btn">Skip (+2s)</button>
-        <button id="next-btn">Next Song</button>
+        <button id="play-snippet" aria-label="Play the current song snippet">Play Snippet</button>
+        <button id="skip-btn" aria-label="Skip and add 2 more seconds to the snippet">Skip (+2s)</button>
+        <button id="next-btn" aria-label="Move to the next song">Next Song</button>
       </div>
 
-      <input id="guess" list="suggestions" placeholder="Guess the song or artist" autocomplete="off" />
-      <datalist id="suggestions"></datalist>
-      <button id="submit-guess">Submit</button>
+      <div id="guess-section">
+        <label for="guess">Enter your guess:</label>
+        <input id="guess" list="suggestions" placeholder="Guess the song or artist" autocomplete="off" aria-describedby="guess-help" />
+        <datalist id="suggestions"></datalist>
+        <p id="guess-help" class="sr-only">Type the name of the song or artist you think is playing</p>
+        <button id="submit-guess" aria-label="Submit your guess">Submit</button>
+      </div>
 
-      <div class="result-row">
+      <div class="result-row" aria-live="polite">
         <p id="result"></p>
         <p id="count"></p>
       </div>
 
-      <div class="progress-container">
-        <div id="progress-bar"></div>
+      <div class="progress-container" aria-label="Game progress">
+        <div id="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
       </div>
-    </div>
+    </section>
 
-    <div id="guess-list" class="hidden">
+    <section id="guess-list" class="hidden" aria-label="Previous guesses">
       <h3>Your Guesses</h3>
       <ul id="guesses"></ul>
-    </div>
-  </div>
+    </section>
+  </main>
 
   <script src="https://sdk.scdn.co/spotify-player.js"></script>
   <script src="main.js"></script>
