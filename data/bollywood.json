@@ -184,7 +184,7 @@
       "Pritam"
     ],
     "uri": "spotify:track:48Ix6ReYdJf2H4mKb3TIpj",
-    "album_art": "https://i.scdn.co/image/ab67616d0000b273a1c00de3e08bfde2c646c7a3"
+    "album_art": "https://i.scdn.co/image/ab67616d0000b27337624412a125715f02c58151"
   },
   {
     "name": "Chammak Challo",
@@ -485,6 +485,15 @@
     "album_art": "https://i.scdn.co/image/ab67616d0000b2736d5222aff82ede55a6f2f813"
   },
   {
+    "name": "Zaalima",
+    "artists": [
+      "Arijit Singh",
+      "Harshdeep Kaur"
+    ],
+    "uri": "spotify:track:4MU4Kfkd9EnkArK2ocQyqK",
+    "album_art": "https://i.scdn.co/image/ab67616d0000b273627b5b17cb48f6e6956b842e"
+  },
+  {
     "name": "Kudmayi",
     "artists": [
       "Sachet Tandon",
@@ -647,7 +656,7 @@
       "Pritam"
     ],
     "uri": "spotify:track:5vGiuYFSGekGLgbxhV1rD5",
-    "album_art": "https://i.scdn.co/image/ab67616d0000b273a1c00de3e08bfde2c646c7a3"
+    "album_art": "https://i.scdn.co/image/ab67616d0000b27337624412a125715f02c58151"
   },
   {
     "name": "Main Rang Sharbaton Ka",
@@ -657,7 +666,7 @@
       "Pritam"
     ],
     "uri": "spotify:track:2IEhtVeM9TVql8fZdKdlo9",
-    "album_art": "https://i.scdn.co/image/ab67616d0000b273a1c00de3e08bfde2c646c7a3"
+    "album_art": "https://i.scdn.co/image/ab67616d0000b27337624412a125715f02c58151"
   },
   {
     "name": "Mast Magan",
@@ -722,9 +731,9 @@
   {
     "name": "Piya O Re Piya",
     "artists": [
+      "Sachin-Jigar",
       "Atif Aslam",
-      "Shreya Ghoshal",
-      "Sachin-Jigar"
+      "Shreya Ghoshal"
     ],
     "uri": "spotify:track:5a11x5PUFvJEadMRqtNtTr",
     "album_art": "https://i.scdn.co/image/ab67616d0000b2739546c25ac50268b2b74842e7"
@@ -807,9 +816,9 @@
   {
     "name": "Jeene Laga Hoon",
     "artists": [
+      "Sachin-Jigar",
       "Atif Aslam",
-      "Shreya Ghoshal",
-      "Sachin-Jigar"
+      "Shreya Ghoshal"
     ],
     "uri": "spotify:track:3t3wsY5IdLVzB9WidegJSU",
     "album_art": "https://i.scdn.co/image/ab67616d0000b273cab73e6ac9bf4bf3c6931570"
@@ -891,5 +900,23 @@
     ],
     "uri": "spotify:track:5PvwPy5eRO8BPwpRzCHK3D",
     "album_art": "https://i.scdn.co/image/ab67616d0000b2736404721c1943d5069f0805f3"
+  },
+  {
+    "name": "Party With The Bhoothnath",
+    "artists": [
+      "Yo Yo Honey Singh"
+    ],
+    "uri": "spotify:track:0e4aaLjrK6sjHyp6eOlhjr",
+    "album_art": "https://i.scdn.co/image/ab67616d0000b273c81d6e472302040873833c4c"
+  },
+  {
+    "name": "Janam Janam",
+    "artists": [
+      "Pritam",
+      "Arijit Singh",
+      "Antara Mitra"
+    ],
+    "uri": "spotify:track:4km0RUkMMFdx8iDuq36o2w",
+    "album_art": "https://i.scdn.co/image/ab67616d0000b27323b8831524517331aa80b877"
   }
 ]
