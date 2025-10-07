@@ -197,8 +197,12 @@ function startGame() {
     document.getElementById('start-btn').classList.add('hidden');
     selector.classList.add('hidden');
     document.getElementById('player-controls').classList.remove('hidden');
+    document.getElementById('intro-text').classList.add('hidden');
+    document.getElementById("game-setup").style.display = "none";
+
     pickRandomTrack();
     playSnippet();
+    
     count.textContent = `${correct}/${total} correct so far`;
 }
 

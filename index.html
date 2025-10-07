@@ -41,13 +41,13 @@
   <main id="game-wrapper">
     <header>
       <h1>Heardle 2</h1>
-      <p>Guess the song from short snippets. Pick a playlist and see how fast you can name that song.</p>
+      <p id="intro-text">Guess the song from short snippets. Pick a playlist and see how fast you can name that song.</p>
     </header>
     
     <section id="game-setup">
       <h2>Choose Your Playlist</h2>
-      <button id="start-btn" class="hidden" aria-label="Start the music guessing game">Start Game</button>
-      <select id="jsonSelector" aria-label="Select a music playlist">
+      <button id="start-btn" class="hidden">Start Game</button>
+      <select id="jsonSelector">
         <option value="" disabled selected>Select a tracklist</option>
         <option value="spotify-2020s.json">Spotify 2020s Mix</option>
         <option value="bollywood.json">Bollywood Mix</option>
@@ -57,32 +57,33 @@
       </select>
     </section>
 
-    <pre id="output" aria-live="polite"></pre>
+    <pre id="output"></pre>
 
-    <section id="player-controls" class="hidden" aria-label="Game controls">
-      <h2>Game Controls</h2>
+    <section id="player-controls" class="hidden">
       <div id="control-buttons">
-        <button id="play-snippet" aria-label="Play the current song snippet">Play Snippet</button>
-        <button id="skip-btn" aria-label="Skip and add 2 more seconds to the snippet">Skip (+2s)</button>
-        <button id="next-btn" aria-label="Move to the next song">Next Song</button>
+        <button id="play-snippet">Play Snippet</button>
+        <button id="skip-btn">Skip (+2s)</button>
+        <button id="next-btn">Next Song</button>
       </div>
-
-      <div id="guess-section">
-        <label for="guess">Enter your guess:</label>
-        <input id="guess" list="suggestions" placeholder="Guess the song or artist" autocomplete="off" aria-describedby="guess-help" />
+        <div id="guess-section">
+        <input id="guess" list="suggestions" placeholder="Guess the song or artist" autocomplete="off" />
         <datalist id="suggestions"></datalist>
-        <p id="guess-help" class="sr-only">Type the name of the song or artist you think is playing</p>
-        <button id="submit-guess" aria-label="Submit your guess">Submit</button>
+        <button id="submit-guess">Submit</button>
       </div>
 
-      <div class="result-row" aria-live="polite">
+      <div class="result-row">
         <p id="result"></p>
         <p id="count"></p>
       </div>
 
-      <div class="progress-container" aria-label="Game progress">
-        <div id="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
+      <div class="progress-container">
+        <div id="progress-bar"></div>
       </div>
+    </section>
+
+    <section id="guess-list" class="hidden">
+      <h3>Your Guesses</h3>
+      <ul id="guesses"></ul>
     </section>
 
     <section id="guess-list" class="hidden" aria-label="Previous guesses">
