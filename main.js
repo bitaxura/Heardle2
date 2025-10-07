@@ -24,59 +24,72 @@ const output = document.getElementById('output');
 
 const redirectUri = `${window.location.origin}${window.location.pathname}`;
 const clientId = '307d9b9fdb904551a147b295c7aaaf57';
+let isSpotifyAuthenticated = false;
 
 (async () => {
     const urlParams = new URLSearchParams(window.location.search);
     let code = urlParams.get('code');
     
-    if (!code) {
-      const generateRandomString = (length) => {
-        const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        const values = crypto.getRandomValues(new Uint8Array(length));
-        return values.reduce((acc, x) => acc + possible[x % possible.length], "");
-      };
-  
-      const sha256 = async (plain) => {
-        const encoder = new TextEncoder();
-        const data = encoder.encode(plain);
-        return window.crypto.subtle.digest('SHA-256', data);
-      };
-  
-      const base64encode = (input) => {
-        return btoa(String.fromCharCode(...new Uint8Array(input)))
-          .replace(/=/g, '')
-          .replace(/\+/g, '-')
-          .replace(/\//g, '_');
-      };
-  
-      const codeVerifier = generateRandomString(64);
-      const hashed = await sha256(codeVerifier);
-      const codeChallenge = base64encode(hashed);
-  
-      localStorage.setItem('code_verifier', codeVerifier);
+    if (code) {
+        await getToken(code);
+        isSpotifyAuthenticated = true;
 
-      const scope = 'streaming user-read-playback-state user-modify-playback-state';
-  
-      const authUrl = new URL("https://accounts.spotify.com/authorize");
-      const params = {
+        const cleanUrl = `${window.location.origin}${window.location.pathname}`;
+        window.history.replaceState({}, document.title, cleanUrl);
+        
+        const savedPlaylist = localStorage.getItem('selected_playlist');
+        if (savedPlaylist) {
+            selector.value = savedPlaylist;
+            const response = await fetch(`data/${savedPlaylist}`);
+            await loadPlaylist(response);
+            
+            startGame();
+            localStorage.removeItem('selected_playlist');
+        }
+    }
+})();
+
+const generateRandomString = (length) => {
+    const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const values = crypto.getRandomValues(new Uint8Array(length));
+    return values.reduce((acc, x) => acc + possible[x % possible.length], "");
+};
+
+const sha256 = async (plain) => {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(plain);
+    return window.crypto.subtle.digest('SHA-256', data);
+};
+
+const base64encode = (input) => {
+    return btoa(String.fromCharCode(...new Uint8Array(input)))
+        .replace(/=/g, '')
+        .replace(/\+/g, '-')
+        .replace(/\//g, '_');
+};
+
+async function redirectToSpotifyAuth() {
+    const codeVerifier = generateRandomString(64);
+    const hashed = await sha256(codeVerifier);
+    const codeChallenge = base64encode(hashed);
+
+    localStorage.setItem('code_verifier', codeVerifier);
+
+    const scope = 'streaming user-read-playback-state user-modify-playback-state';
+
+    const authUrl = new URL("https://accounts.spotify.com/authorize");
+    const params = {
         response_type: 'code',
         client_id: clientId,
         scope,
         code_challenge_method: 'S256',
         code_challenge: codeChallenge,
         redirect_uri: redirectUri,
-      };
-  
-      authUrl.search = new URLSearchParams(params).toString();
-      window.location.href = authUrl.toString();
-      return;
-    } else {
-      await getToken(code);
+    };
 
-      const cleanUrl = `${window.location.origin}${window.location.pathname}`;
-      window.history.replaceState({}, document.title, cleanUrl);
-    }
-})();
+    authUrl.search = new URLSearchParams(params).toString();
+    window.location.href = authUrl.toString();
+}
   
 async function getToken(code) {
     const codeVerifier = localStorage.getItem('code_verifier');
@@ -98,7 +111,7 @@ async function getToken(code) {
     localStorage.setItem('access_token', data.access_token);
     localStorage.setItem('refresh_token', data.refresh_token);
     localStorage.setItem('expires_at', Date.now() + data.expires_in * 1000);
-  
+
     console.log('Access Token:', data.access_token);
 }
   
@@ -180,6 +193,15 @@ function addGuessToList(guessText, isCorrect) {
     guessesUl.appendChild(li);
 }
 
+function startGame() {
+    document.getElementById('start-btn').classList.add('hidden');
+    selector.classList.add('hidden');
+    document.getElementById('player-controls').classList.remove('hidden');
+    pickRandomTrack();
+    playSnippet();
+    count.textContent = `${correct}/${total} correct so far`;
+}
+
 function setupUI() {
     const startBtn = document.getElementById('start-btn');
     const playBtn = document.getElementById('play-snippet');
@@ -193,13 +215,18 @@ function setupUI() {
         startBtn.classList.remove('hidden');
       });
 
-    startBtn.addEventListener('click', () => {
-        startBtn.classList.add('hidden');
-        selector.classList.add('hidden');
-        document.getElementById('player-controls').classList.remove('hidden');
-        pickRandomTrack();
-        playSnippet();
-        count.textContent = `${correct}/${total} correct so far`;
+    startBtn.addEventListener('click', async () => {
+        const token = localStorage.getItem('access_token');
+        const expiresAt = localStorage.getItem('expires_at');
+        
+        if (!token || !expiresAt || Date.now() >= parseInt(expiresAt)) {
+            localStorage.setItem('selected_playlist', selector.value);
+            
+            await redirectToSpotifyAuth();
+            return;
+        }
+
+        startGame();
     });
 
     playBtn.addEventListener('click', playSnippet);
