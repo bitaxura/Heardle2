@@ -1,18 +1,4 @@
 User-agent: *
 Allow: /
 
-# Sitemap location
 Sitemap: https://bitaxura.github.io/Heardle2/sitemap.xml
-
-# Allow all search engines to crawl the main files
-Allow: /index.html
-Allow: /style.css
-Allow: /main.js
-Allow: /data/
-
-# Disallow crawling of any temporary or cache files
-Disallow: /*.tmp
-Disallow: /.*
-
-# Crawl delay (optional - helps prevent overwhelming the server)
-Crawl-delay: 1
